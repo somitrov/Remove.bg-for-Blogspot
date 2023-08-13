@@ -1,0 +1,68 @@
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+// Replace this with your own API key
+var apiKey = "INSERT_YOUR_API_KEY_HERE";
+
+// The URL of the image you want to process
+var imageUrl = "https://example.com/image.jpg";
+
+// The size of the output image
+var size = "auto";
+
+// The format of the output image
+var format = "png";
+
+// The function that calls the remove.bg API and displays the result
+function removeBackground() {
+  // Create a new XMLHttpRequest object
+  var xhr = new XMLHttpRequest();
+
+  // Set the request method and URL
+  xhr.open("POST", "https://api.remove.bg/v1.0/removebg");
+
+  // Set the request headers
+  xhr.setRequestHeader("X-API-Key", apiKey);
+  xhr.setRequestHeader("Content-Type", "application/json");
+
+  // Set the response type
+  xhr.responseType = "blob";
+
+  // Set the callback function when the request is completed
+  xhr.onload = function() {
+    // Check if the status code is 200 (OK)
+    if (xhr.status === 200) {
+      // Create a new URL object from the response blob
+      var url = URL.createObjectURL(xhr.response);
+
+      // Create a new image element and set its source to the URL
+      var img = document.createElement("img");
+      img.src = url;
+
+      // Append the image element to the div with id="result"
+      document.getElementById("result").appendChild(img);
+    } else {
+      // Display an error message
+      alert("Error: " + xhr.statusText);
+    }
+  };
+
+  // Set the callback function when the request fails
+  xhr.onerror = function() {
+    // Display an error message
+    alert("Network Error");
+  };
+
+  // Send the request with the image URL as data
+  xhr.send(JSON.stringify({image_url: imageUrl, size: size, format: format}));
+}
+</script>
+</head>
+<body>
+<h1>Remove Background Example</h1>
+<p>This is an example of how to use the remove.bg API in a blog post.</p>
+<button onclick="removeBackground()">Remove Background</button>
+<div id="result"></div>
+</body>
+</html>
